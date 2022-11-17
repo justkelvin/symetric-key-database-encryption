@@ -16,7 +16,7 @@ from cryptography.hazmat.backends import default_backend
 import base64
 
 console = Console()
-console.print('Database Encryption Project', style='bold red')
+console.print('Database Encryption Project\n', style='bold red')
 app = typer.Typer()
 
 # get password

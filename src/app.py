@@ -50,8 +50,16 @@ class App:
         else:
             print('Login failed')
             
-    def insert_data(self, name, email, password):
+    def signup(self, name = None, email = None, password = None):
         """ Insert data into database and perform hashing using sha256 """
+        # prompt for details
+        if name == None:
+            name = input('Enter your name: ')
+        if email == None:
+            email = input('Enter your email: ')
+        if password == None:
+            password = input('Enter your password: ')
+        # hash the password
         password = password.encode('utf-8')
         password = hashlib.sha256(password).hexdigest()
         email = email.encode('utf-8')

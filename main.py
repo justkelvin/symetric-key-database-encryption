@@ -2,26 +2,26 @@
 
 # imports go here
 import sys
-import src.app as app
+import src.app as APP
 import src.gen_key as gen_key
 from rich.console import Console
 from rich.table import Table
 import typer
 
-app = typer.Typer()
+app = typer.Typer(add_completion=False)
 console = Console()
 
 # main function
-@app.command(short_help='Login to the application.')
+@app.command('login' ,short_help='Login to the application.')
 def login(email: str, password: str):
     """Login to the application"""
-    app = app.App()
+    app = APP.App()
     app.login(email, password)
 
-@app.command(short_help='Get data from the database.')
+@app.command('database', short_help='Get all the data from the database.')
 def get_data():
     """Get data from the database"""
-    app = app.App()
+    app = APP.App()
     data = app.get_data()
     table = Table(show_header=True, header_style="bold magenta")
     table.add_column("ID", style="dim", width=12)
@@ -32,41 +32,42 @@ def get_data():
         table.add_row(str(row[0]), row[1], row[2], row[3])
     console.print(table)
 
-@app.command(short_help='Add data to the database.')
-def add_data(name: str, email: str, password: str):
+@app.command('signup', short_help='Sign up for the application.')
+def add_data(name: str = None, email: str = None, password: str = None):
     """Add data to the database"""
-    app = app.App()
-    app.add_data(name, email, password)
+    console.print('Enter your details to signup\n', style='bold green')
+    app = APP.App()
+    app.signup(name, email, password) # Pass this data to the signup function if it exists
 
-@app.command(short_help='Update data in the database.')
+@app.command('reset', short_help='Reset your password.')
 def update_data(id: int, name: str, email: str, password: str):
     """Update data in the database"""
-    app = app.App()
+    app = APP.App()
     app.update_data(id, name, email, password)
 
-@app.command(short_help='Delete data from the database.')
+@app.command('leave', short_help='Delete your data from the database.')
 def delete_data(id: int):
     """Delete data from the database"""
-    app = app.App()
+    app = APP.App()
     app.delete_data(id)
 
-@app.command(short_help='Generate a key and save it to a file.')
+@app.command('generate', short_help='Generate a key and save it to a file.')
 def gen_key():
     """Generate a key and save it to a file"""
     password = gen_key.get_password()
     key = gen_key.generate_key(password)
     gen_key.save_key(key)
 
-@app.command(short_help='Encrypt the database.')
+@app.command('encrypt', short_help='Encrypt the database.')
 def encrypt_db():
     """Encrypt the database"""
-    app = app.App()
+    app = APP.App()
     app.encrypt_db()
 
-@app.command(short_help='Decrypt the database.')
+@app.command('decrypt', short_help='Decrypt the database.')
 def decrypt_db():
     """Decrypt the database"""
-    app = app.App()
+    app = APP.App()
     app.decrypt_db()
 
 if __name__ == '__main__':
