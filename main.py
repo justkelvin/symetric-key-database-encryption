@@ -34,31 +34,7 @@ def main():
                 print('Invalid choice')
         except KeyboardInterrupt:
             sys.exit(0)
-            
 
-    # while 1:
-    #     print('1. LOgin')
-    #     print('2. Insert data')
-    #     print('3. Update data')
-    #     print('4. Exit')
-    #     choice = int(input('Enter your choice: '))
-    #     if choice == 1:
-    #         data = app_instance.get_data()
-    #         print(data)
-    #     elif choice == 2:
-    #         name = input('Enter name: ')
-    #         email = input('Enter email: ')
-    #         password = input('Enter password: ')
-    #         app_instance.insert_data(name, email, password)
-    #     elif choice == 3:
-    #         uid = int(input('Enter id: '))
-    #         name = input('Enter name: ')
-    #         email = input('Enter email: ')
-    #         app_instance.update_data(uid, name, email)
-    #     elif choice == 4:
-    #         sys.exit(0)
-    #     else:
-    #         print('Invalid choice')
 
 if __name__ == "__main__":
     main()
