@@ -65,17 +65,5 @@ def regenerate():
     console.print('⚠️ WARNING: This will delete your old key and replace it with a new one. Make sure you have a backup of your old key before proceeding.\n', style='bold red')
     Enc.main()
 
-@app.command('encrypt', short_help='Encrypt the database.')
-def encrypt_db():
-    """Encrypt the database"""
-    app = APP.App()
-    app.encrypt_db()
-
-@app.command('decrypt', short_help='Decrypt the database.')
-def decrypt_db():
-    """Decrypt the database"""
-    app = APP.App()
-    app.decrypt_db()
-
 if __name__ == '__main__':
     app()
