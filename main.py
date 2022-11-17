@@ -3,7 +3,7 @@
 # imports go here
 import sys
 import src.app as APP
-import src.gen_key as gen_key
+import src.encryption as Enc
 from rich.console import Console
 from rich.table import Table
 import typer
@@ -13,7 +13,7 @@ console = Console()
 
 # main function
 @app.command('login' ,short_help='Login to the application.')
-def login(email: str, password: str):
+def login(email: str = None, password: str = None):
     """Login to the application"""
     app = APP.App()
     app.login(email, password)
@@ -27,7 +27,7 @@ def get_data():
     table.add_column("ID", style="dim", width=12)
     table.add_column("Name", style="dim", width=12)
     table.add_column("Email", style="dim", width=12)
-    table.add_column("Password", style="dim", width=12)
+    table.add_column("Password", style="dim", width=120)
     for row in data:
         table.add_row(str(row[0]), row[1], row[2], row[3])
     console.print(table)
@@ -52,11 +52,18 @@ def delete_data(id: int):
     app.delete_data(id)
 
 @app.command('generate', short_help='Generate a key and save it to a file.')
-def gen_key():
+def encryption():
     """Generate a key and save it to a file"""
-    password = gen_key.get_password()
-    key = gen_key.generate_key(password)
-    gen_key.save_key(key)
+    password = Enc.get_password()
+    key = Enc.generate_key(password)
+    Enc.save_key(key)
+
+@app.command('regenerate', short_help='Regenerate a key and save it to a file.')
+def regenerate():
+    """Regenerate a key and save it to a file"""
+    console.print('Enter your password to regenerate your key\n', style='bold green')
+    console.print('⚠️ WARNING: This will delete your old key and replace it with a new one. Make sure you have a backup of your old key before proceeding.\n', style='bold red')
+    Enc.main()
 
 @app.command('encrypt', short_help='Encrypt the database.')
 def encrypt_db():

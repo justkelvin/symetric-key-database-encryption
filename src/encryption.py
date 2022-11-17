@@ -2,18 +2,19 @@
 
 # Generate an encryption key with password and salt
 # imports go here
+import base64
+import hashlib
 import os
 import sys
-import hashlib
-from click import prompt
-import typer
+
 import cryptography
-from rich.console import Console
+import typer
+from click import prompt
 from cryptography.fernet import Fernet
+from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.hazmat.backends import default_backend
-import base64
+from rich.console import Console
 
 console = Console()
 console.print('Database Encryption Project\n', style='bold red')
@@ -26,7 +27,7 @@ def get_password():
     password = prompt('Enter the password: ', hide_input=True)
     conf_password = prompt('Confirm the password: ', hide_input=True)
     if password != conf_password:
-        print('Passwords do not match')
+        console.print('❌ Passwords do not match', style='bold red')
         sys.exit(0)
     return password
 
@@ -46,6 +47,7 @@ def generate_key(password):
         backend=default_backend()
     )
     key = base64.urlsafe_b64encode(kdf.derive(password)) # Can only use kdf once 
+    console.print('🔐 Key generated successfully\n', style='bold green')
     return key
 
 # Save the key
@@ -55,13 +57,14 @@ def save_key(key):
     with open('credentials/key.key', 'wb') as key_file:
         key_file.write(key)
     key_file.close()
+    console.print(f'🔑 Key: {key}\n', style='italic green')
+    console.print('✅ Encryption Key saved to file at credentials/key.key', style='bold green')
 
 # # main function
 @app.command(short_help='Generate a key and save it to a file.')
 def main():
     """Main function to generate the key and save it to a file"""
     password = get_password()
-    print(password)
     key = generate_key(password)
     save_key(key)
     print(key)
