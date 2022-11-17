@@ -6,14 +6,21 @@ import os
 import sys
 import hashlib
 from click import prompt
+import typer
 import cryptography
+from rich.console import Console
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.backends import default_backend
 import base64
 
+console = Console()
+console.print('Database Encryption Project', style='bold red')
+app = typer.Typer()
+
 # get password
+@app.command(short_help='Get password for key generation.')
 def get_password():
     """Get the password from the user"""
     password = prompt('Enter the password: ', hide_input=True)
@@ -24,6 +31,7 @@ def get_password():
     return password
 
 # Generate a key
+@app.command(short_help='Generate a key and salt it.')
 def generate_key(password):
     """Generate a key from the password and salt and return it"""
     password = password.encode('utf-8') # Convert to bytes
@@ -41,6 +49,7 @@ def generate_key(password):
     return key
 
 # Save the key
+@app.command(short_help='Save the key to a file.')
 def save_key(key):
     """Save the key to a file called key.key"""
     with open('credentials/key.key', 'wb') as key_file:
@@ -48,6 +57,7 @@ def save_key(key):
     key_file.close()
 
 # # main function
+@app.command(short_help='Generate a key and save it to a file.')
 def main():
     """Main function to generate the key and save it to a file"""
     password = get_password()

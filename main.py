@@ -4,26 +4,103 @@
 import sys
 import src.app as app
 import src.gen_key as gen_key
+from rich.console import Console
+from rich.table import Table
+import typer
+
+app = typer.Typer()
+console = Console()
 
 # main function
-def main():
-    app_instance = app.App()
-    if len(sys.argv) == 1:
-        print('Please enter a command')
-        sys.exit(0)
-    if sys.argv[1] == 'login':
-        app_instance.login(sys.argv[2], sys.argv[3])
-    elif sys.argv[1] == 'genkey':
-        gen_key.main()
-    elif sys.argv[1] == 'getdata':
-        print(app_instance.get_data())
-    elif sys.argv[1] == 'insertdata':
-        app_instance.insert_data(sys.argv[2], sys.argv[3], sys.argv[4])
-    else:
-        print('Invalid command')
+@app.command(short_help='Login to the application.')
+def login(email: str, password: str):
+    """Login to the application"""
+    app = app.App()
+    app.login(email, password)
+
+@app.command(short_help='Get data from the database.')
+def get_data():
+    """Get data from the database"""
+    app = app.App()
+    data = app.get_data()
+    table = Table(show_header=True, header_style="bold magenta")
+    table.add_column("ID", style="dim", width=12)
+    table.add_column("Name", style="dim", width=12)
+    table.add_column("Email", style="dim", width=12)
+    table.add_column("Password", style="dim", width=12)
+    for row in data:
+        table.add_row(str(row[0]), row[1], row[2], row[3])
+    console.print(table)
+
+@app.command(short_help='Add data to the database.')
+def add_data(name: str, email: str, password: str):
+    """Add data to the database"""
+    app = app.App()
+    app.add_data(name, email, password)
+
+@app.command(short_help='Update data in the database.')
+def update_data(id: int, name: str, email: str, password: str):
+    """Update data in the database"""
+    app = app.App()
+    app.update_data(id, name, email, password)
+
+@app.command(short_help='Delete data from the database.')
+def delete_data(id: int):
+    """Delete data from the database"""
+    app = app.App()
+    app.delete_data(id)
+
+@app.command(short_help='Generate a key and save it to a file.')
+def gen_key():
+    """Generate a key and save it to a file"""
+    password = gen_key.get_password()
+    key = gen_key.generate_key(password)
+    gen_key.save_key(key)
+
+@app.command(short_help='Encrypt the database.')
+def encrypt_db():
+    """Encrypt the database"""
+    app = app.App()
+    app.encrypt_db()
+
+@app.command(short_help='Decrypt the database.')
+def decrypt_db():
+    """Decrypt the database"""
+    app = app.App()
+    app.decrypt_db()
 
 if __name__ == '__main__':
-    main()
+    app()
+
+
+
+# def main():
+#     app_instance = app.App()
+#     if len(sys.argv) == 1:
+#         print('Please enter a command')
+#         sys.exit(0)
+#     if sys.argv[1] == 'login':
+#         app_instance.login(sys.argv[2], sys.argv[3])
+#     elif sys.argv[1] == 'genkey':
+#         gen_key.main()
+#     elif sys.argv[1] == 'getdata':
+#         print(app_instance.get_data())
+#     elif sys.argv[1] == 'insertdata':
+#         app_instance.insert_data(sys.argv[2], sys.argv[3], sys.argv[4])
+#     else:
+#         # Print usage
+#         print('Usage: python3 main.py [command] [args]')
+#         print('Commands:')
+#         print('login [email] [password]')
+#         print('genkey')
+#         print('getdata')
+#         print('insertdata [name] [email] [password]')
+#         print('Invalid command')
+#         sys.exit(0)
+        
+
+# if __name__ == '__main__':
+#     main()
 
 #     while True:
 #         try:

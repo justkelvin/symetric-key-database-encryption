@@ -5,6 +5,7 @@ import os
 import sys
 import hashlib
 import cryptography
+import typer
 from cryptography.fernet import Fernet
 from config import Database as DB
 from dotenv import load_dotenv
