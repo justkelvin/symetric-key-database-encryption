@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-# Generate an encryption key with password and salt
 # imports go here
 import base64
 import hashlib
